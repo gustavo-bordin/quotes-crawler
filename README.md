@@ -1,4 +1,5 @@
 # Random quotes generator's database filler
+https://github.com/gustavobordinho/random-quote-generator
 
 ### 1. Used tools
 
