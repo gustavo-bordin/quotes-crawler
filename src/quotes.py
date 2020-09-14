@@ -1,4 +1,5 @@
 import scrapy
+from database import Database
 
 
 class QuotesSpider(scrapy.Spider):
@@ -6,10 +7,10 @@ class QuotesSpider(scrapy.Spider):
 
     start_urls = ["https://www.pensador.com/frases/"]
 
-    quotes = []
+    database = Database()
 
     def parse(self, response):
-
+        quotes = []
         cards = response.xpath("//*[@class='thought-card']")
         for card in cards:
             content = card.xpath(
@@ -17,7 +18,9 @@ class QuotesSpider(scrapy.Spider):
             author = card.xpath(
                 ".//span[@class='autor']/a/text()").extract_first()
 
-            self.quotes.append({"content": content, "author": author})
+            quotes.append({"content": content, "author": author})
+
+        self.database.insert(quotes)
 
         pagination_buttons = response.xpath("//a[@class='nav']")
         switch_page = pagination_buttons[-1]
@@ -26,6 +29,3 @@ class QuotesSpider(scrapy.Spider):
             next_page_url = switch_page.xpath('@href').extract_first()
             absolute_url = response.urljoin(next_page_url)
             yield scrapy.Request(absolute_url)
-
-        else:
-            print(self.quotes)
