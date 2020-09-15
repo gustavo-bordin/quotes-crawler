@@ -48,3 +48,5 @@ $ docker-compose build; docker-compose up -d
 ```
 $ docker-compose exec app scrapy runspider quotes.py
 ```
+
+# P.S: If you let the script reach its end, you will get over 250.200 quotes
